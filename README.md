@@ -1,14 +1,9 @@
-# THIS PROJECT IS NO LONGER MAINTAINED!
-
-I forked it purely to get it running on Clojure 1.3 and then found it didn't do what I needed anyway.
-
-If you think it might be useful to you, please fork it and maintain it yourself. If you decide to take over as lead maintainer, let me know and I'll update this readme to point to your new fork.
+I forked it purely to get it running on **Clojure 1.7.0** and upgraded to the lastest versions all the dependencies.
 
 # clj-soap
 
 clj-soap is SOAP server and client using Apache Axis2.
 
-This version is updated from Tetsuya Takatsuru's version to use Clojure 1.5.1 (and modern contrib). Note however that I am not actively maintaining this library and would welcome someone taking it over. I updated Tetsuya's code to use a more modern Clojure environment purely to test it for a problem I was working on - it didn't really do what I needed so I took a different approach (using Axis 1.x libraries at a much lower level for one specific web service).
 
 ## Usage
 
@@ -18,8 +13,9 @@ You can call remote SOAP method as following:
 ```clojure
 (require '[clj-soap.core :as soap])
 
-(let [client (soap/client-fn "http://... (URL for WSDL)")]
-  (client :someMethod param1 param2 ...))
+(let [client (soap/client-fn "http://www.webservicex.com/globalweather.asmx?WSDL")]
+   (client :GetWeather "Murcia" "Spain" ))
+
 ```
 ### Server
 
