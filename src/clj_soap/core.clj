@@ -105,11 +105,21 @@
 (defmethod soap-str->obj :boolean [soap-str argtype] (Boolean/parseBoolean soap-str))
 (defmethod soap-str->obj :default [soap-str argtype] soap-str)
 
-(defn make-client [url]
-  (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil nil)
-    (.setOptions
+(defn make-client
+  ([url]
+   (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil nil)
+     (.setOptions
       (doto (org.apache.axis2.client.Options.)
         (.setTo (org.apache.axis2.addressing.EndpointReference. url))))))
+  ([url username password]
+   (let [auth (doto (org.apache.axis2.transport.http.HttpTransportProperties.Authenticator.) (.setUsername username) (.setPassword password))]
+     (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil nil)
+       (.setOptions
+        (doto (org.apache.axis2.client.Options.)
+          (.setTo (org.apache.axis2.addressing.EndpointReference. url))
+          (.setProperty org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth)))))))
+
+
 
 (defn make-request [op & args]
   (let [factory (org.apache.axiom.om.OMAbstractFactory/getOMFactory)
@@ -136,8 +146,9 @@
     (get-result
       op (.sendReceive client (.getName op) (apply make-request op args)))))
 
-(defn client-proxy [url]
-  (let [client (make-client url)]
+
+(defn client-proxy [url username password]
+  (let [client (make-client url username password)]
     (->> (for [op (axis-service-operations (.getAxisService client))]
                [(keyword (axis-op-name op))
                 (fn soap-call [& args] (apply client-call client op args))])
@@ -145,8 +156,7 @@
 
 (defn client-fn
   "Make SOAP client function, which is called as: (x :someMethod arg1 arg2 ...)"
-  [url]
-  (let [px (client-proxy url)]
+  [url username password]
+  (let [px (client-proxy url username password )]
     (fn [opname & args]
       (apply (px opname) args))))
-
