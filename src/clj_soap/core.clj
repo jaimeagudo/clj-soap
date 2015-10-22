@@ -112,15 +112,33 @@
       (doto (org.apache.axis2.client.Options.)
         (.setTo (org.apache.axis2.addressing.EndpointReference. url))))))
  ([url username password]
-  (let [schemes (doto (java.util.ArrayList.) (.add org.apache.commons.httpclient.auth.AuthPolicy/BASIC))
+  (let [java-url (java.net.URL. url)
+;        schemes (doto (java.util.ArrayList.) (.add org.apache.commons.httpclient.auth.AuthPolicy/BASIC))
         auth (doto (org.apache.axis2.transport.http.HttpTransportProperties$Authenticator.)
-               (.setUsername username) (.setPassword password) (.setPreemptiveAuthentication true) (.setAuthSchemes schemes))
+               (.setUsername username)
+               (.setPassword password)
+               (.setHost (.getHost java-url))
+               (.setPort (.getPort java-url))
+               (.setPreemptiveAuthentication true)
+;               (.setAuthSchemes schemes)
+               )
         options (doto (org.apache.axis2.client.Options.)
                   (.setTo (org.apache.axis2.addressing.EndpointReference. url))
                   (.setProperty org.apache.axis2.transport.http.HTTPConstants/AUTHENTICATE, auth))
+
         ]
-    (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil options)
-))))
+    (doto (org.apache.axis2.client.ServiceClient.)
+      (.setOptions options)
+;      (.setTo (org.apache.axis2.addressing.EndpointReference. url))
+      )
+    ;; (try
+    ;;   (let [client ]
+
+    ;;     client
+    ;;     )
+    ;;   (catch Exception e (print e))
+    ;;   )
+)))
 
 
 

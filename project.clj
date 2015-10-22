@@ -9,5 +9,6 @@
                  [org.apache.axis2/axis2-transport-http "1.6.3"]
                  [org.apache.axis2/axis2-transport-local "1.6.3"]]
   :source-paths ["src" "test"]
-;  :aot [clj-soap.test.core]
+  :java-source-paths ["src/main/java"]
+  :aot [clj-soap.test.core]
   )
