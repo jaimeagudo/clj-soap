@@ -112,12 +112,12 @@
       (doto (org.apache.axis2.client.Options.)
         (.setTo (org.apache.axis2.addressing.EndpointReference. url))))))
   ([url username password]
-   (let [auth (doto (org.apache.axis2.transport.http.HttpTransportProperties.Authenticator.) (.setUsername username) (.setPassword password))]
+   (let [auth (doto (org.apache.axis2.transport.http.HttpTransportProperties$Authenticator.) (.setUsername username) (.setPassword password))]
      (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil nil)
        (.setOptions
         (doto (org.apache.axis2.client.Options.)
           (.setTo (org.apache.axis2.addressing.EndpointReference. url))
-          (.setProperty org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth)))))))
+(.setProperty org.apache.axis2.transport.http.HTTPConstants/AUTHENTICATE, auth)))))))
 
 
 
