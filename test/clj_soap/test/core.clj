@@ -26,5 +26,5 @@
     ))
 
 ;;;; Test for exteral SOAP service
-(let [client (client-fn "http://wsf.cdyne.com/WeatherWS/Weather.asmx?WSDL")]
+(let [client (client-fn "http://wsf.cdyne.com/WeatherWS/Weather.asmx?WSDL" nil nil )]
   (client :GetCityWeatherByZIP "16001"))
