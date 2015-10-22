@@ -113,7 +113,7 @@
   ;;       (.setTo (org.apache.axis2.addressing.EndpointReference. url))))))
   ([url username password]
    (let [auth (doto (org.apache.axis2.transport.http.HttpTransportProperties$Authenticator.)
-                (.setUsername username) (.setPassword password) (.setPort 443) (.setPreemptiveAuthentication true))]
+                (.setUsername username) (.setPassword password) (.setPreemptiveAuthentication true))]
      (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil nil)
        (.setOptions
         (doto (org.apache.axis2.client.Options.)
