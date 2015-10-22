@@ -114,12 +114,13 @@
  ([url username password]
   (let [schemes (doto (java.util.ArrayList.) (.add org.apache.commons.httpclient.auth.AuthPolicy/BASIC))
         auth (doto (org.apache.axis2.transport.http.HttpTransportProperties$Authenticator.)
-               (.setUsername username) (.setPassword password) (.setPreemptiveAuthentication true) (.setAuthSchemes schemes))]
-    (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil nil)
-      (.setOptions
-       (doto (org.apache.axis2.client.Options.)
-         (.setTo (org.apache.axis2.addressing.EndpointReference. url))
-         (.setProperty org.apache.axis2.transport.http.HTTPConstants/AUTHENTICATE, auth)))))))
+               (.setUsername username) (.setPassword password) (.setPreemptiveAuthentication true) (.setAuthSchemes schemes))
+        options (doto (org.apache.axis2.client.Options.)
+                  (.setTo (org.apache.axis2.addressing.EndpointReference. url))
+                  (.setProperty org.apache.axis2.transport.http.HTTPConstants/AUTHENTICATE, auth))
+        ]
+    (doto (org.apache.axis2.client.ServiceClient. nil (java.net.URL. url) nil options)
+))))
 
 
 
